@@ -1,0 +1,6 @@
+[submodule "vim/.vim/bundle/vim-love-docs"]
+	path = vim/.vim/bundle/vim-love-docs
+	url = https://github.com/davisdude/vim-love-docs
+[submodule "vim/.vim/bundle/gruvbox"]
+	path = vim/.vim/bundle/gruvbox
+	url = https://github.com/morhetz/gruvbox

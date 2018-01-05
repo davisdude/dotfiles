@@ -1,0 +1,103 @@
+#!/usr/bin/env sh
+#
+# /usr/local/bin/brightness
+#
+# Author:        Davis Claiborne
+# Last modified: Friday, September 22, 2017
+# Description:   Set the brightness of the screen as a percentage of the max
+#                brightness.
+
+# Set default backlight device
+device="intel_backlight"
+
+# Path to the backlight to change
+backlightPath="/sys/class/backlight/$device/brightness"
+
+# Get max baclkight setting
+maxBacklightPath="/sys/class/backlight/$device/max_brightness"
+maxBacklight="$(cat $maxBacklightPath)"
+
+# Get current backlight setting
+currentBacklight="$(cat $backlightPath)"
+
+# Get a percent of the max backlight
+function percentOfMaxBacklight {
+	echo $((maxBacklight * $1 / 100))
+}
+
+# Write backlight to file
+function writeBacklight {
+	sudo tee "$backlightPath" <<< $1
+}
+
+# Parse flags
+# No flags: show current brightness
+if [ $# -eq 0 ];
+then
+	# Show current backlight setting
+	percentOfMaxBacklightage=$((currentBacklight * 100 / maxBacklight))
+	echo "Current brightness: $percentOfMaxBacklightage% or $currentBacklight/$maxBacklight"
+	exit
+fi
+
+# 1 flag:
+#	- Set brightness as a percent of max brightness (10 -> 10%)
+#	- Increment/decrement brightness by percent of max (+10 -> +10%)
+if [ $# -eq 1 ];
+then
+	# Check if input is an integer with a +/- sign (increment backlight)
+	match=$(grep "^\(+\|-\)[0-9]\+$" <<< $1)
+	if [ -n "$match" ];
+	then
+		# Increment/decrement backlight by that percent of the max
+		increment=$(percentOfMaxBacklight $1)
+		
+		# Increase backlight
+		echo "Increasing brightness by $1%"
+		backlightSetting=$((currentBacklight + increment))
+
+		# Clamp value
+		if [ $backlightSetting -gt $maxBacklight ];
+		then
+			echo "Value exceeds maximum; using max instead"
+			backlightSetting=$maxBacklight
+		else
+			if [ $backlightSetting -lt 0 ];
+			then
+				echo "Value exceeds minium; using minimum"
+				# Don't actually use 0 because that's way too hard to see
+				backlightSetting=1
+			fi
+		fi
+
+		# Write change to file
+		writeBacklight $backlightSetting
+		exit
+	fi
+
+	# Check if input is an integer (set backlight)
+	if [ "$1" -eq "$1" ] 2>/dev/null
+	then
+		# Ensure number is between 0 and 100
+		if [ $1 -gt 100 ] || [ $1 -lt 0 ];
+		then
+			echo "Error: invalid value: percent must be between 0 and 100"
+			exit 1
+		fi
+
+		# Convert percent to scale of max
+		backlightSetting=$(percentOfMaxBacklight $1)
+		echo "Setting brightness to: $backlightSetting"
+
+		# Write change to file
+		writeBacklight $backlightSetting
+		exit
+	fi
+
+	echo "Error: invalid input"
+else
+	# Too many flags
+	echo "Error: invalid number of parameters"
+fi
+
+# vim:ft=sh
