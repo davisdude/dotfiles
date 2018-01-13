@@ -1,0 +1,249 @@
+#!/usr/bin/env sh
+#
+# /usr/local/bin/fix-scans
+#
+# Author:        Davis Claiborne
+# Last modified: Wednesday, January 10, 2017
+# Description:   Orders scanned pages correctly
+#
+# My scanner only has one-sided scanning, so when I have to scan a stack of
+# two-sided papers, I scan the first side, then flip the stack over and scan
+# the other side. Unfortunately, this results in pages that are not ordered
+# correctly. This scipts puts the images in the correct order.
+
+# Parses arguments
+quiet=false
+while [ $# -gt 0 ]
+do
+	key="$1"
+
+	case $key in
+		-ef | --end-file )
+			endFile="$2"
+			shift
+			shift
+			;;
+		-f | --file-prefix )
+			filePrefix="$2"
+			shift
+			shift
+			;;
+		-o | --output-directory )
+			outputDir="$2"
+			shift
+			shift
+			;;
+		-q | --quiet )
+			quiet=true
+			shift
+			;;
+		-sf | --start-file )
+			startFile="$2"
+			shift
+			shift
+			;;
+		-si | --start-index )
+			startIndex="$2"
+			shift
+			shift
+			;;
+		-w | --working-directory )
+			workingDir="$2"
+			shift
+			shift
+			;;
+		-z | --zeroes )
+			zeroes="$2"
+			shift
+			shift
+			;;
+		* )
+			echo "Error: Invalid flag $key"
+			exit
+			;;
+	esac
+done
+
+function findFile() {
+	target="$(basename "$1")"
+
+	index=0
+	for i in "${!files[@]}"
+	do
+		if [ "$(basename "${files[$i]}")" == "$target" ]
+		then
+			echo $index
+			return 0
+		fi
+		index=$(($index+1))
+	done
+
+	return 1
+}
+
+function formatIndex() {
+	index=$1
+	printf "%0${zeroes}d" $1
+}
+
+function copyFile() {
+	fileIndex=$1
+	indexFormatted=$(formatIndex $(($index + $startIndex)))
+
+	fileOrigName="${files[$fileIndex]}"
+	fileOrigLoc="$workingDir/$fileOrigName"
+	fileOrigBasename="$(basename "$fileOrigName")"
+
+	fileNewName="$filePrefix$indexFormatted-$fileOrigBasename"
+	fileNewLoc="$outputDir/$fileNewName"
+
+	cp "$fileOrigLoc" "$fileNewLoc"
+}
+
+if [ "$startIndex" == "" ]
+then
+	startIndex=0
+fi
+
+if [ "$workingDir" == "" ]
+then
+	defaultWorkingDir="."
+	read -e -r -p "Working directory ($defaultWorkingDir): " workingDir
+	if [ "$workingDir" == "" ]
+	then
+		workingDir="$defaultWorkingDir"
+	fi
+fi
+
+# Removes escape characters, as they mess up commands (like pushd)
+workingDir=$(echo "$workingDir" | sed 's@\\@@g')
+
+# Prompts for information
+if [ "$outputDir" == "" ]
+then
+	defaultOutputDir="pics"
+	read -e -p "Output directory ($workingDir/$defaultOutputDir): " outputDir
+	if [ "$outputDir" == "" ]
+	then
+		outputDir="$workingDir/$defaultOutputDir"
+	fi
+fi
+
+# Creates direcotry
+if [ ! -d "$outputDir" ]
+then
+	mkdir --parents "$outputDir"
+
+	if [ ! $? -eq 0 ]
+	then
+		echo "Error: Trouble creating directory"
+		exit
+	fi
+else
+	if ! $quiet
+	then
+		echo
+		echo "	Direcotry already present"
+		echo "	Continuing..."
+		echo
+	fi
+fi
+
+# Gets all the files in the directory
+# Cant' have spaces so this is the next best thing
+pushd "$workingDir" > /dev/null
+	files=(./*)
+
+	# Removes non-files
+	for i in "${!files[@]}"
+	do
+		if [ ! -f "${files[$i]}" ]
+		then
+			unset 'files[$i]'
+		fi
+	done
+popd > /dev/null
+
+# Removes holes from the array
+files=( "${files[@]}" )
+
+if [ "$filePrefix" == "" ]
+then
+	defaultFilePrefix="file_"
+	read -e -p "File prefix ($defaultFilePrefix): " filePrefix
+	if [ "$filePrefix" == "" ]
+	then
+		filePrefix=$defaultFilePrefix
+	fi
+fi
+
+if [ "$startFile" == "" ]
+then
+	echo
+	ls --color=auto
+	echo
+
+	defaultStartFile="${files[0]}"
+	read -e -p "Starting file ($defaultStartFile): " startFile
+	if [ "$startFile" == "" ]
+	then
+		startFile=$defaultStartFile
+	fi
+fi
+
+startNumber=$(findFile "$startFile")
+if [ ! $? -eq 0 ]
+then
+	echo "Error: File \"$startFile\" not found!"
+	exit
+fi
+
+if [ "$endFile" == "" ]
+then
+	defaultEndFile="${files[-1]}"
+	read -e -p "Ending file ($defaultEndFile): " endFile
+	if [ "$endFile" == "" ]
+	then
+		endFile=$defaultEndFile
+	fi
+fi
+
+endNumber=$(findFile "$endFile")
+if [ ! $? -eq 0 ]
+then
+	echo "Error: File \"$endFile\" not found!"
+	exit
+fi
+
+# Checks that the number of files between is even
+if [ $(( ( $startNumber + $endNumber ) % 2 )) -eq 0 ]
+then
+	echo "Error: There must be an even number of files between the start and end!"
+	exit
+fi
+
+numberOfFiles=$(($endNumber - $startNumber + 1))
+
+# Get the number of zeroes required
+# log10 would be ideal, though this works as well
+if [ "$zeroes" == "" ]
+then
+	zeroes=0
+	while [ $numberOfFiles -gt 0 ]
+	do
+		numberOfFiles=$((numberOfFiles / 10))
+		zeroes=$(($zeroes + 1))
+	done
+fi
+
+index=0
+for i in $(seq $startNumber 2 $endNumber)
+do
+	copyFile $(($startNumber + ($index + 1) / 2))
+	index=$(($index + 1))
+
+	copyFile $(($endNumber - $index / 2))
+	index=$(($index + 1))
+done
+
+# vim:ft=sh
