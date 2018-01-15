@@ -47,6 +47,3 @@ taskd.credentials=inthe_am/davisclaib/88fc549d-98aa-4fb9-9bed-1a136f67cf50
 
 # Allow recurrence
 recurrence=on
-
-# https://bug.tasktools.org/browse/TD-104
-json.depends.array=off
