@@ -1,0 +1,92 @@
+#!/usr/bin/env sh
+#
+# /usr/bin/local/backup
+#
+#
+# Author:        Davis Claiborne
+# Last modified: Sunday, January 14 2018
+# Description:   Backs up my files and packages.
+
+# Default variables; change as needed
+user="davis"
+outputDir="/mnt/sdb1/backup/"
+quiet=false
+
+# Parses arguments
+while [ $# -gt 0 ]
+do
+	key="$1"
+
+	case "$key" in
+		-o | --output_dir )
+			outputDir="$2"
+			shift
+			shift
+			;;
+		-q | --quiet )
+			quiet=true
+			shift
+			;;
+		-u | --user )
+			user="$2"
+			shift
+			shift
+			;;
+		* )
+			echo "Error: Invalid flag $key"
+			exit
+			;;
+	esac
+done
+
+# Formats the output of pacman queries in a way that can be used later for easy
+# installation
+function formatQuery() {
+	pacmanOutput="$1"
+
+	echo "$pacmanOutput" \
+	| grep -o '^[^ ]\+' \
+	| tr '\n' ' '
+}
+
+# I'm too lazy to add a conditional to every echo statement, so this *should*
+# be okay, but don't quote me on it.
+if $quiet
+then
+	function echo() {
+		return
+	}
+fi
+
+# Creates a new directory for the backup, specifiying the time and date
+pushd "$outputDir" > /dev/null
+
+echo Creating directory...
+directoryName="$user-arch-"$(date +"%Y-%m-%d-%H-%M")
+mkdir $directoryName
+pushd $directoryName > /dev/null
+
+# Gets all native packages.
+# This list can be installed via `pacman -S - < pacman-native-packages.txt`
+echo Storing pacman-native packages
+nativePkgs="$(pacman -Qent)"
+formatQuery "$nativePkgs" > pacman-native-packages.txt
+
+# Gets a list of all foreign packages.
+# This list can be installed via `cower -d - < pacman-foreign-packages.txt`
+echo Storing pacman-foreign packages...
+foreignPkgs="$(pacman -Qemt)"
+formatQuery "$foreignPkgs" > pacman-foreign-packages.txt
+
+echo Creating tree of home directory
+echo $(tree -I '.*' "/home/$user/" > tree.txt)
+
+# Compresses home directory
+echo Compressing home directory...
+pushd "/home/$user/" > /dev/null
+
+# Shows the estimated time remaining (https://superuser.com/a/665181)
+tar cf - . -P | pv -s $(du -sb . | awk '{print $1}') | gzip > $outputDir/$directoryName/home.tar.gz
+
+popd > /dev/null
+popd > /dev/null
