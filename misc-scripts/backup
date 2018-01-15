@@ -83,10 +83,9 @@ echo $(tree -I '.*' "/home/$user/" > tree.txt)
 
 # Compresses home directory
 echo Compressing home directory...
-pushd "/home/$user/" > /dev/null
 
 # Shows the estimated time remaining (https://superuser.com/a/665181)
-tar cf - . -P | pv -s $(du -sb . | awk '{print $1}') | gzip > $outputDir/$directoryName/home.tar.gz
+tar czf - "/home/$user/" -P | pv -s $(du -sb "/home/$user/" | awk '{print $1}') | gzip > $outputDir/$directoryName/home.tar.gz
 
 popd > /dev/null
 popd > /dev/null
