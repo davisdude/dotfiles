@@ -169,4 +169,4 @@ bindsym XF86AudioLowerVolume exec "amixer -q sset Master 1%-"
 bindsym XF86AudioRaiseVolume exec "amixer -q sset Master 1%+"
 
 # Autostart
-exec  --no-startup-id caffeine
+exec --no-startup-id caffeine
