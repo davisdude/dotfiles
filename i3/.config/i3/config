@@ -160,6 +160,8 @@ focus_follows_mouse no
 
 # Binds brightness keys
 # Keys found using xev
+# Make sure to add the brightness script to /etc/sudoers.d, otherwise nothing
+# will happen because of invalid permissions.
 bindsym XF86MonBrightnessDown exec "sudo brightness -1"
 bindsym XF86MonBrightnessUp   exec "sudo brightness +1"
 
