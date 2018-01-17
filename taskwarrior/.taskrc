@@ -45,5 +45,10 @@ taskd.credentials=inthe_am/davisclaib/88fc549d-98aa-4fb9-9bed-1a136f67cf50
 #taskd.credentials=FreeCinc\/freecinc_a4918972\/ba4e42c2-a481-45f6-9407-30904cb76654
 
 
-# Allow recurrence
+# Allows recurrence
 recurrence=on
+
+# Modifies urgency values
+urgency.age.coefficient=0
+urgency.annotations.coefficient=0
+urgency.tags.coefficient=0
