@@ -80,5 +80,7 @@ PS1=$PS1_Dark
 export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
 
-# Append to history instead of overwriting
+# Moves things to ~/trash instead of deleting them
+alias trash='mv -t ~/trash'
+
 shopt -s histappend
