@@ -5,7 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Make outputs more colorful
+# Makes outputs more colorful
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
@@ -76,11 +76,12 @@ export PS1_Light="$BgWhite$Bold$FgRed\u$FgBlack$UnBold@$Bold$FgBlue\h$FgBlack$Un
 PS1=$PS1_Dark
 # }}}
 
-# Set $EDITOR
+# Sets $EDITOR
 export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
 
 # Moves things to ~/trash instead of deleting them
 alias trash='mv -t ~/trash'
 
+# Appends to history instead of overwriting
 shopt -s histappend
