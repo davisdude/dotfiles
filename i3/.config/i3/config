@@ -175,8 +175,8 @@ bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 
 # Locks computer
-bindsym $mod+"Control_L" exec "xautolock -locknow & systemctl suspend"
+bindsym $mod+"Control_L" exec "xautolock -locknow"
 
 # Autostart
 exec --no-startup-id caffeine
-exec --no-startup-id xautolock -time 10 -locker 'i3lock -f -c 6E6E6E'
+exec --no-startup-id xautolock -time 10 -locker 'systemctl suspend & i3lock -f -c 6E6E6E'
