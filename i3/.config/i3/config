@@ -175,7 +175,7 @@ bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 
 # Locks computer
-bindsym $mod+"Control_L" exec "xautolock -locknow"
+bindsym $mod+"Control_L" exec "xautolock -locknow & systemctl suspend"
 
 # Autostart
 exec --no-startup-id caffeine
