@@ -76,6 +76,31 @@ export PS1_Light="$BgWhite$Bold$FgRed\u$FgBlack$UnBold@$Bold$FgBlue\h$FgBlack$Un
 PS1=$PS1_Dark
 # }}}
 
+# Man page colors {{{
+#
+#    terminfo capname  termcap name  description               Color    Code
+#    ----------------  ------------  ------------------------  -------  ----
+#    bold              md            turn on bold              black    0
+#    blink             mb            turn on blinking          red      1
+#    sgr0              me            turn off all attributes   green    2
+#    smso              so            begin standout mode       yellow   3
+#    rmso              se            exit standout mode        blue     4
+#    rev               mr            turn on reverse mode      magenta  5
+#    dim               mh            turn on half-bright mode  cyan     6
+#    rmul              ue            exit underline mode       white    7
+#    smul              us            begin underline mode
+export MANROFFOPT='-c'
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 3)
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4)
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_mr=$(tput rev)
+export LESS_TERMCAP_mh=$(tput dim)
+# }}}
+
 # Sets $EDITOR
 export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
