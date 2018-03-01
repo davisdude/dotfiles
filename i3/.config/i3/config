@@ -180,3 +180,4 @@ bindsym $mod+"Control_L" exec "xautolock -locknow"
 # Autostart
 exec --no-startup-id caffeine
 exec --no-startup-id xautolock -time 10 -locker 'systemctl suspend & i3lock -f -c 6E6E6E'
+exec --no-startup-id lightscreen
