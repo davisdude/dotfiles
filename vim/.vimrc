@@ -14,6 +14,7 @@ execute pathogen#infect()
 " Set absolute number for current line; relative everywhere else ('hybrid numbering')
 set relativenumber
 set number
+set ruler
 
 " Highlight searches
 set hlsearch
@@ -39,6 +40,9 @@ set splitright
 
 " Make quickfix window possible to read
 highlight QuickFixLine ctermbg=8 guibg=gray
+
+" Hightlight cursor line
+set cursorline
 " }}}
 " Plugins {{{
 " Syntastic {{{
