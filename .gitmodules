@@ -4,3 +4,6 @@
 [submodule "vim/.vim/bundle/gruvbox"]
 	path = vim/.vim/bundle/gruvbox
 	url = https://github.com/morhetz/gruvbox
+[submodule "vim/.vim/bundle/undotree"]
+	path = vim/.vim/bundle/undotree
+	url = https://github.com/mbbill/undotree
