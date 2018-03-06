@@ -283,8 +283,8 @@ input {
 audio_output {
 	type		"pulse"
 	name		"My Pulse Output"
-##	server		"remote_server"		# optional
-##	sink		"remote_server_sink"	# optional
+#	server		"remote_server"		# optional
+#	sink		"remote_server_sink"	# optional
 }
 #
 # An example of a winmm output (Windows multimedia API).
