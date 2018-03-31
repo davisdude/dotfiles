@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+#
+# /usr/local/bin/equalize-volume-levels
+#
+# Author:        Davis Claiborne
+# Last modified: Saturday, March 31, 2018
+# Description:   Equalizes alsa levels
+#
+# When changing the volume via i3 shortcuts (see i3/.config/i3), the volume
+# levels on the left and right channels can sometimes become unequal for some
+# reason (this doesn't seem to happen when manually changing volume via
+# amixer). To keep this from happening, set the volume to whatever the right
+# channel is at.
+#
+# Ideally, I would like to find a better solution, since this slows down the
+# process of changing the volume considerably
+
+amixer -q sset Master $(         # Sets volume to result of this command
+	amixer get Master |      # Gets master volume info
+	tail -n 1 |              # Trims output to only last line
+	sed -n 's/[^\[]*\[//p'|  # Removes everything up until the [volume%]
+	sed -n 's/[^%]*$//p'     # Removes everything after the [volume%]
+)
+
+# vim:ft=sh
