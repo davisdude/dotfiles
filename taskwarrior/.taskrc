@@ -30,19 +30,19 @@ data.location=~/.task
 #include /usr/share/doc/task/rc/no-color.theme
 
 # InThe.AM Credentials
-taskd.server=inthe.am:53589
-taskd.key=\/home\/davis\/.task\/intheam\/private.key.pem
-taskd.certificate=\/home\/davis\/.task\/intheam\/private.certificate.pem
-taskd.ca=\/home\/davis\/.task\/intheam\/ca.cert.pem
-taskd.credentials=inthe_am/davisclaib/88fc549d-98aa-4fb9-9bed-1a136f67cf50
+# taskd.server=inthe.am:53589
+# taskd.key=\/home\/davis\/.task\/intheam\/private.key.pem
+# taskd.certificate=\/home\/davis\/.task\/intheam\/private.certificate.pem
+# taskd.ca=\/home\/davis\/.task\/intheam\/ca.cert.pem
+# taskd.credentials=inthe_am/davisclaib/88fc549d-98aa-4fb9-9bed-1a136f67cf50
 
 # FreeCinc Credentials
 # https://github.com/jackdesert/freecinc/issues/4
-#taskd.server=freecinc.com:53589
-#taskd.key=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.key.pem
-#taskd.certificate=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.cert.pem
-#taskd.ca=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.ca.pem
-#taskd.credentials=FreeCinc\/freecinc_a4918972\/ba4e42c2-a481-45f6-9407-30904cb76654
+taskd.server=freecinc.com:53589
+taskd.key=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.key.pem
+taskd.certificate=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.cert.pem
+taskd.ca=\/home\/davis\/.task\/freecinc\/freecinc_a4918972.ca.pem
+taskd.credentials=FreeCinc\/freecinc_a4918972\/ba4e42c2-a481-45f6-9407-30904cb76654
 
 # Allows recurrence
 recurrence=on
