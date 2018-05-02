@@ -10,7 +10,6 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
 # Prompt strings {{{
-# Escape sequences {{{
 txtblk='\[\e[0;30m\]' # Black - Regular
 txtred='\[\e[0;31m\]' # Red
 txtgrn='\[\e[0;32m\]' # Green
