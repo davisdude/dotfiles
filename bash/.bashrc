@@ -79,7 +79,7 @@ export EDITOR="$VISUAL"
 
 # Moves things to ~/trash instead of deleting them
 alias trash='mv -t ~/trash'
-alias feh='feh --auto-rotate --auto-zoom'
+alias feh='feh --auto-rotate --auto-zoom --keep-zoom-vp'
 
 # Appends to history instead of overwriting
 shopt -s histappend
