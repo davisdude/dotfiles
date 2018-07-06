@@ -1,0 +1,8 @@
+# Sets vi to default editor for readline
+set editing-mode vi
+
+$if mode=vi
+    # Insert mode
+    set keymap vi-insert
+    "jk": vi-movement-mode # Remaps escape
+$endif
