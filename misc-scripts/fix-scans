@@ -65,12 +65,12 @@ do
 done
 
 function findFile() {
-	target="$(basename "$1")"
+	target="$(basename "./$1")"
 
 	index=0
 	for i in "${!files[@]}"
 	do
-		if [ "$(basename "${files[$i]}")" == "$target" ]
+		if [ "$(basename "./${files[$i]}")" == "$target" ]
 		then
 			echo $index
 			return 0
@@ -92,7 +92,7 @@ function copyFile() {
 
 	fileOrigName="${files[$fileIndex]}"
 	fileOrigLoc="$workingDir/$fileOrigName"
-	fileOrigBasename="$(basename "$fileOrigName")"
+	fileOrigBasename="$(basename "./$fileOrigName")"
 
 	fileNewName="$filePrefix$indexFormatted-$fileOrigBasename"
 	fileNewLoc="$outputDir/$fileNewName"
