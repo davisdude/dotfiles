@@ -83,3 +83,5 @@ alias feh='feh --auto-rotate --auto-zoom --keep-zoom-vp'
 
 # Appends to history instead of overwriting
 shopt -s histappend
+
+set -o vi
