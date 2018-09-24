@@ -22,6 +22,11 @@ volume master {
 	mixer_idx = 0
 }
 
+ipv6 {
+	format_up = "IPv6: Yes"
+	format_down = "IPv6: No"
+}
+
 wireless _first_ {
 	format_up = "W: (%quality at %essid, %bitrate / %frequency) %ip"
 	format_down = "W: down"
