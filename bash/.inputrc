@@ -1,8 +1,19 @@
-# Sets vi to default editor for readline
+# Sets input mode to vi instead of emacs
 set editing-mode vi
 
+# jk is easier to type than escape
 $if mode=vi
     # Insert mode
     set keymap vi-insert
     "jk": vi-movement-mode # Remaps escape
 $endif
+
+# Highlights matched prefix when tabbing path names
+set colored-completion-prefix on
+set colored-stats on
+
+# Makes file completion similar to Vim's
+# "\e[Z" is shift-tab
+set show-all-if-ambiguous on
+TAB: menu-complete
+"\e[Z": menu-complete-backward
