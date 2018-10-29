@@ -72,6 +72,8 @@ let mapleader = " "
 noremap! <C-BS> <C-W>
 noremap! <C-H> <C-W>
 
+inoremap jk <ESC>
+
 " Get text inserted
 nnoremap gi `[v`]
 " }}}
