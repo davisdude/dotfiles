@@ -78,10 +78,8 @@ export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
 
 # Moves things to ~/trash instead of deleting them
-alias trash='mv -t ~/trash'
+alias trash='mv -t ~/.local/share/Trash/files/'
 alias feh='feh --auto-rotate --auto-zoom --keep-zoom-vp'
 
 # Appends to history instead of overwriting
 shopt -s histappend
-
-set -o vi
