@@ -77,6 +77,10 @@ export LESS_TERMCAP_mh=$(tput dim)
 export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
 
+PATH="$PATH:/usr/local/MATLAB/R2018b/bin"
+export PATH="$PATH:/home/davis/.gem/ruby/2.6.0/bin"
+
+
 # Moves things to ~/trash instead of deleting them
 alias trash='mv -t ~/.local/share/Trash/files/'
 
