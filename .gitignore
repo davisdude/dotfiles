@@ -1,2 +1,6 @@
 vim/.vim/.netrwhist
 *.swp
+
+# Ignore all beets configurations except config.yaml
+beets/.config/beets/
+!beets/.config/beets/config.yaml
