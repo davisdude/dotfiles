@@ -4,3 +4,10 @@ vim/.vim/.netrwhist
 # Ignore all beets configurations except config.yaml
 beets/.config/beets/
 !beets/.config/beets/config.yaml
+
+# Don't add taskwarrior private keys / data
+taskwarrior/.task
+timewarrior/.timewarrior
+
+# Ignores metadata files
+i3/.config/dconf
