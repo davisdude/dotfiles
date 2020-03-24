@@ -8,7 +8,7 @@ xrandr --output eDP1 --scale 1x1 --dpi 220
 
 # Set the delay before autorepeat starts
 #           Delay(ms) Repeats/second
-xset r rate 400       44
+xset r rate 200       20
 
 # Launch i3
 exec i3
