@@ -8,7 +8,8 @@ Xft.rgba: rgb
 *.scrollBar: false
 *.background: black
 *.foreground: white
-*.font: xft:Inconsolata:size=8
+!*.font: xft:Consolas:size=8
+*.font: xft:Consolas:size=8
 *.cursorBlink: true
 
 ! Allow dynamic color changes
