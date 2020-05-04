@@ -4,22 +4,37 @@
 #
 #
 # Author:        Davis Claiborne
-# Last modified: Sunday, January 14, 2018
+# Last modified: Saturday, May 2, 2020
 # Description:   Backs up my files and packages.
 
-# Default variables; change as needed
-user="davis"
-outputDir="/mnt/sdb1/backup/"
-quiet=false
+# Flags:
+# -b --backup_dir: Specifies location to create backup
+# -d --directory:  Specifies location to backup
+# -q --quiet:      Suppress script output (some)
+# -d --deploy:     Apply backup
 
-# Parses arguments
+# Default variables; change as needed
+backup_dir=/mnt/backup/
+directory=$HOME
+quiet=false
+deploy=false
+
+###############################################################################
+# Argument parsing
+###############################################################################
+
 while [ $# -gt 0 ]
 do
 	key="$1"
 
 	case "$key" in
-		-o | --output_dir )
-			outputDir="$2"
+		-b | --backup_dir )
+			backup_dir="$2"
+			shift
+			shift
+			;;
+		-d | --directory )
+			user="$2"
 			shift
 			shift
 			;;
@@ -27,25 +42,25 @@ do
 			quiet=true
 			shift
 			;;
-		-u | --user )
-			user="$2"
-			shift
+		-d | --deploy  )
+			deploy=true
 			shift
 			;;
 		* )
-			echo "Error: Invalid flag $key"
+			echo "Error: Invalid flag '$key'"
 			exit
 			;;
 	esac
 done
 
+###############################################################################
+# Helper functions
+###############################################################################
+
 # Formats the output of pacman queries in a way that can be used later for easy
 # installation
-function formatQuery() {
-	pacmanOutput="$1"
-
-	echo "$pacmanOutput" \
-	| grep -o '^[^ ]\+' \
+function format_package_list() {
+	echo "$1" \
 	| tr '\n' ' '
 }
 
@@ -58,34 +73,49 @@ then
 	}
 fi
 
-# Creates a new directory for the backup, specifiying the time and date
-pushd "$outputDir" > /dev/null
+###############################################################################
+# Actual script
+###############################################################################
 
-echo Creating directory...
-directoryName="$user-arch-"$(date +"%Y-%m-%d-%H-%M")
-mkdir $directoryName
-pushd $directoryName > /dev/null
+if ( $deploy ); then
+	# Copies backup
+	rsync --archive --verbose --human-readable --progress \
+		--exclude='pacman-native-packages.txt' \
+		--exclude='pacman-foreign-packages.txt' \
+		$backup_dir $directory
 
-# Gets all native packages.
-# This list can be installed via `pacman -S - < pacman-native-packages.txt`
-echo Storing pacman-native packages
-nativePkgs="$(pacman -Qent)"
-formatQuery "$nativePkgs" > pacman-native-packages.txt
+	# Installs native packages
+	sudo pacman -S - < $backup_dir/pacman-native-packages.txt
 
-# Gets a list of all foreign packages.
-# This list can be installed via `cower -d - < pacman-foreign-packages.txt`
-echo Storing pacman-foreign packages...
-foreignPkgs="$(pacman -Qemt)"
-formatQuery "$foreignPkgs" > pacman-foreign-packages.txt
+	# Installs foreign packages
+	mkdir tmp_dir=tmp
+	while [ -d $tmp ] do
+		tmp_dir=$tmp_dir_
+	done
+	mkdir $tmp_dir
 
-echo Creating tree of home directory
-echo $(tree -I '.*' "/home/$user/" > tree.txt)
+	while read p; do
+		auracle --chdir=$tmp_dir download $p
+	done < $backup_dir/pacman-foreign-packages.txt
+	find . -name PKGBUILD -execdir makepkg --syncdeps --install \;
+	yes | rm -r $tmp_dir
+else
+	# Gets all native packages.
+	echo Storing native packages
+	native_packages="$(pacman --query --explicit --native --quiet --unrequired)"
+	format_package_list "$native_packages" > $backup_dir/pacman-native-packages.txt
 
-# Compresses home directory
-echo Compressing home directory...
+	# Gets a list of all foreign packages.
+	echo Storing foreign packages...
+	foreign_packages="$(pacman --query --explicit --foreign --quiet --unrequired)"
+	echo "$foreign_packages" > $backup_dir/pacman-foreign-packages.txt
 
-# Shows the estimated time remaining (https://superuser.com/a/665181)
-tar czf - "/home/$user/" -P | pv -s $(du -sb "/home/$user/" | awk '{print $1}') | gzip > $outputDir/$directoryName/home.tar.gz
-
-popd > /dev/null
-popd > /dev/null
+	# Performs backup
+	echo Performing backup
+	rsync --archive --verbose --human-readable --progress --cvs-exclude \
+		--exclude='.*' \
+		--exclude='_minted*' \
+		--exclude='CMakeFiles' \
+		--exclude='__pycache__' \
+		$directory $backup_dir
+fi
