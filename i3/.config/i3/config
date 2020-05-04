@@ -187,9 +187,10 @@ bindsym $mod+p exec "passmenu"
 
 # Autostart
 exec --no-startup-id caffeine
-exec --no-startup-id compton --daemon --no-dock-shadow --no-dnd-shadow --backend glx --xrender-sync-fence --vsync
+exec --no-startup-id picom --daemon --no-dock-shadow --no-dnd-shadow --backend glx --vsync
 exec --no-startup-id flameshot
-#exec --no-startup-id xautolock -time 10 -locker 'systemctl suspend & i3lock -f -c 6E6E6E'
+exec --no-startup-id xautolock -time 10 -locker 'systemctl suspend & i3lock -f -c 6E6E6E'
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+exec --no-startup-id redshift-gtk
 #exec --no-startup-id touchegg
-#exec --no-startup-id redshift-gtk
 #exec --no-startup-id blueman-applet
