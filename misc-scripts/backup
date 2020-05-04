@@ -88,17 +88,11 @@ if ( $deploy ); then
 	sudo pacman -S - < $backup_dir/pacman-native-packages.txt
 
 	# Installs foreign packages
-	mkdir tmp_dir=tmp
-	while [ -d $tmp ] do
-		tmp_dir=$tmp_dir_
-	done
-	mkdir $tmp_dir
-
+	tmp_dir=/tmp
 	while read p; do
 		auracle --chdir=$tmp_dir download $p
 	done < $backup_dir/pacman-foreign-packages.txt
-	find . -name PKGBUILD -execdir makepkg --syncdeps --install \;
-	yes | rm -r $tmp_dir
+	find $tmp_dir -name PKGBUILD -execdir makepkg --syncdeps --install \;
 else
 	# Gets all native packages.
 	echo Storing native packages
