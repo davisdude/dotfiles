@@ -78,19 +78,20 @@ export VISUAL="/usr/bin/vim"
 export EDITOR="$VISUAL"
 
 PATH="$PATH:/usr/local/MATLAB/R2018b/bin"
-export PATH="$PATH:/home/davis/.gem/ruby/2.6.0/bin"
+PATH="$PATH:/home/davis/.local/bin"
+export PATH="$PATH:/home/davis/.gem/ruby/2.7.0/bin"
 
 alias feh='feh --auto-rotate --auto-zoom --keep-zoom-vp'
 
 # Adds command to use ranger to change directories
 function ranger-cd {
-tempfile="$(mktemp -t tmp.XXXXXX)"
-/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-test -f "$tempfile" &&
-	if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-		cd -- "$(cat "$tempfile")"
-	fi
-	rm -f -- "$tempfile"
+	tempfile="$(mktemp -t tmp.XXXXXX)"
+	/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+	test -f "$tempfile" &&
+		if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+			cd -- "$(cat "$tempfile")"
+		fi
+		rm -f -- "$tempfile"
 }
 
 # Appends to history instead of overwriting
