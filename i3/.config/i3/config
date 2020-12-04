@@ -187,10 +187,11 @@ bindsym $mod+p exec "passmenu"
 
 # Autostart
 exec --no-startup-id caffeine
-exec --no-startup-id picom --daemon --no-dock-shadow --no-dnd-shadow --backend glx --vsync
+exec --no-startup-id picom --daemon --backend glx --vsync --inactive-opacity 1
 exec --no-startup-id flameshot
 exec --no-startup-id xautolock -time 10 -locker 'systemctl suspend & i3lock -f -c 6E6E6E'
-exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
-exec --no-startup-id redshift-gtk
+# Waits for internet connection before starting redshift
+# https://stackoverflow.com/a/22277977/2238176
+#exec --no-startup-id for i in {1..50}; do ping -c1 1.1.1.1 &> /dev/null && break; done; redshift-gtk
+exec --no-startup-id blueman-applet
 #exec --no-startup-id touchegg
-#exec --no-startup-id blueman-applet
