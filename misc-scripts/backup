@@ -104,12 +104,29 @@ else
 	foreign_packages="$(pacman --query --explicit --foreign --quiet --unrequired)"
 	echo "$foreign_packages" > $backup_dir/pacman-foreign-packages.txt
 
+	# Excludes specific files
+	top=$(basename $directory)
+	find $directory -type f ! -newer $backup_dir/last-updated.txt > $backup_dir/exclude-files.txt
+
+	# Fixes path for exclude to work properly
+	sed -i "s|^$directory|/$top|g" exclude-files.txt
+
+	# Excludes extra files
+	echo "/$top/VirtualBox VMs/" >> $backup_dir/exclude-files.txt
+	echo "/$top/temp" >> $backup_dir/exclude-files.txt
+	echo "/$top/dotfiles" >> $backup_dir/exclude-files.txt
+	echo '.*' >> $backup_dir/exclude-files.txt
+	echo '_minted*' >> $backup_dir/exclude-files.txt
+	echo 'CMakeFiles' >> $backup_dir/exclude-files.txt
+	echo '__pycache__' >> $backup_dir/exclude-files.txt
+
 	# Performs backup
 	echo Performing backup
 	rsync --archive --verbose --human-readable --progress --cvs-exclude \
-		--exclude='.*' \
-		--exclude='_minted*' \
-		--exclude='CMakeFiles' \
-		--exclude='__pycache__' \
+		--exclude-from=$backup_dir/exclude-files.txt \
 		$directory $backup_dir
+
+	# Gets time (used to exclude intentionally deleted files)
+	touch $backup_dir/last-updated.txt
+	rm $backup_dir/exclude-files.txt
 fi
