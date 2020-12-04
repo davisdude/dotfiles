@@ -44,17 +44,6 @@ highlight QuickFixLine ctermbg=8 guibg=gray
 " Hightlight cursor line
 set cursorline
 " }}}
-" Plugins {{{
-" Syntastic {{{
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-"  Lua
-let g:syntastic_lua_checkers = ["luac", "luacheck"]
-let g:syntastic_lua_luacheck_args = "--std luajit --globals love"
-" }}}
-" }}}
 " Tabs {{{
 set tabstop=8
 set softtabstop=8
@@ -72,6 +61,7 @@ let mapleader = " "
 noremap! <C-BS> <C-W>
 noremap! <C-H> <C-W>
 
+" Allow jk key sequence to stop typing so you don't have to reach to escape
 inoremap jk <ESC>
 
 " Get text inserted
@@ -92,7 +82,7 @@ set timeoutlen=1000 ttimeoutlen=0
 " Make backspace work as expected
 set backspace=2
 
-" Make j and k not skip lines, unless given a count
+" Make j and k not skip wrapped lines, unless given a count
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
