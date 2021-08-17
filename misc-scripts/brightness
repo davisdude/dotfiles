@@ -8,7 +8,7 @@
 #                brightness.
 
 # Set default backlight device
-device="intel_backlight"
+device="amdgpu_bl0"
 
 # Path to the backlight to change
 backlightPath="/sys/class/backlight/$device/brightness"
