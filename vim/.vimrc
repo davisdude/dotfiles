@@ -22,9 +22,6 @@ set hlsearch
 " Show search progress
 set incsearch
 
-" Clear search highlighting by pressing enter
-nnoremap <CR> :nohlsearch<CR>
-
 " Add a vertical bar
 set colorcolumn=80
 
@@ -66,6 +63,9 @@ inoremap jk <ESC>
 
 " Get text inserted
 nnoremap gi `[v`]
+
+" Clear search highlighting by pressing enter
+nnoremap <leader><CR> :nohlsearch<CR>
 " }}}
 " Whitespace {{{
 " Show Tabs and extra spaces
