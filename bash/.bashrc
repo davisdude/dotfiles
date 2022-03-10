@@ -79,7 +79,8 @@ export EDITOR="$VISUAL"
 
 PATH="$PATH:/usr/local/MATLAB/R2018b/bin"
 PATH="$PATH:/home/davis/.local/bin"
-export PATH="$PATH:/home/davis/.gem/ruby/2.7.0/bin"
+PATH="$PATH:/home/davis/.gem/ruby/2.7.0/bin"
+export PATH="$PATH:/home/davis/.local/share/gem/ruby/3.0.0/bin"
 
 alias feh='feh --auto-rotate --auto-zoom --keep-zoom-vp'
 
@@ -96,3 +97,14 @@ function ranger-cd {
 
 # Appends to history instead of overwriting
 shopt -s histappend
+
+# Language
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
+# TODO: Light mode
+# change PS1
+# setterm -inversescreen on
+
+# TODO: Notifications, e.g. ./long-script; alert("done :)")
