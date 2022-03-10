@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # /usr/local/bin/brightness
 #
@@ -6,6 +6,20 @@
 # Last modified: Friday, September 22, 2017
 # Description:   Set the brightness of the screen as a percentage of the max
 #                brightness.
+#
+# Usage:
+# 	brightness [num]
+#
+# 	num: Number between 0 and 100; desired brightness level
+#
+# Notes:
+# 	* Must be run as `sudo` or added to `sudoers` like so:
+# 	* Change `device` to match the name in `/sys/class/backlight/`
+#
+# /etc/sudoers.d/brightness:
+# <USER> ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/brightness
+#
+# Where <USER> is your username
 
 # Set default backlight device
 device="amdgpu_bl0"
@@ -100,4 +114,4 @@ else
 	echo "Error: invalid number of parameters"
 fi
 
-# vim:ft=sh
+# vim:ft=bash
