@@ -183,7 +183,12 @@ bindsym $mod+Shift+Tab workspace prev
 bindsym $mod+"Control_L" exec "xautolock -locknow"
 
 # Opens password menu
-bindsym $mod+p exec "passmenu"
+bindsym $mod+p exec pass -c $( \
+	find ~/.password-store/ -name "*.gpg" -type f \
+	| sed 's|^.*\.password-store/\(.*\).gpg$|\1|' \
+	| sort \
+	| dmenu \
+)
 
 # Autostart
 exec --no-startup-id caffeine
