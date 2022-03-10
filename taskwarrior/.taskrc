@@ -57,3 +57,4 @@ recurrence=on
 urgency.age.coefficient=0
 urgency.annotations.coefficient=0
 urgency.tags.coefficient=0
+news.version=2.6.0
