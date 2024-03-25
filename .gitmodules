@@ -10,3 +10,6 @@
 [submodule "vim/.vim/bundle/vim-signature"]
 	path = vim/.vim/bundle/vim-signature
 	url = https://github.com/kshenoy/vim-signature
+[submodule "vim/.vim/bundle/vim-flatbuffers"]
+	path = vim/.vim/bundle/vim-flatbuffers
+	url = https://github.com/dcharbon/vim-flatbuffers.git
